@@ -1,0 +1,12 @@
+{
+  "name": "project-sudoku",
+  "version": "1.0.0",
+  "description": "![Решение анимация](readme-assets/sequence.gif)",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "runner.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

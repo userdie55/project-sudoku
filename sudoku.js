@@ -1,6 +1,4 @@
 const fs = require('fs');
-const { EOL } = require('os');
-const colors = require('colors');
 const { backtrack } = require('./sup-functions/sup-solve');
 
 function read(path, lineIndex = 0) {
@@ -56,7 +54,7 @@ function prettyBoard(grid) {
     for (let col = 0; col < 9; col++) {
       const val = grid[row][col];
       if (val !== null) {
-        line += val.toString().red + ' ';
+        line += val.toString() + ' ';
       } else {
         line += '· ';
       }
@@ -65,7 +63,7 @@ function prettyBoard(grid) {
     console.log(line);
 
     if (row === 2 || row === 5) {
-      console.log(horizontalLine.gray);
+      console.log(horizontalLine);
     }
   }
   if (isSolved(grid)) {

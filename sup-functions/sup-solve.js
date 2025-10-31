@@ -8,7 +8,7 @@ function backtrack(array) {
     if (isValid(array, row, col, num)) {
       array[row][col] = num;
 
-      if (backtrack()) return true;
+      if (backtrack(array)) return true;
 
       array[row][col] = null;
     }

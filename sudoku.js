@@ -78,6 +78,5 @@ function prettyBoard(grid) {
 module.exports = {
   read,
   solve,
-  isSolved,
   prettyBoard,
 };

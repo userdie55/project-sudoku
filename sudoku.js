@@ -1,5 +1,6 @@
 const fs = require('fs');
 const { backtrack } = require('./sup-functions/sup-solve');
+const { drawGrid } = require('./sup-functions/sup-prettyboard');
 
 function read(path, lineIndex = 0) {
   const data = fs.readFileSync(path, 'utf8');
@@ -47,27 +48,49 @@ function isSolved(board) {
 }
 
 function prettyBoard(grid) {
-  const horizontalLine = '───────┼───────┼───────';
+  const horizontalLine = '──────┼───────┼───────';
 
-  for (let row = 0; row < 9; row++) {
-    let line = '';
-    for (let col = 0; col < 9; col++) {
-      const val = grid[row][col];
-      if (val !== null) {
-        line += val.toString() + ' ';
-      } else {
-        line += '· ';
-      }
-      if (col === 2 || col === 5) line += '│ ';
-    }
-    console.log(line);
-
-    if (row === 2 || row === 5) {
-      console.log(horizontalLine);
+  const coords = [];
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      coords.push([i, j]);
     }
   }
 
-  return isSolved(grid) ? console.log('\n✅ Судоку решено') : console.log('\n❌ Судоку не может быть решён')
+  if (isSolved(grid)) {
+    const displayGrid = Array.from({ length: 9 }, () => Array(9).fill(' '));
+
+    let count = 0;
+    drawGrid(displayGrid, horizontalLine);
+
+    const interval = setInterval(() => {
+      if (count >= coords.length) {
+        clearInterval(interval);
+        console.log('\n✅ Судоку решено!');
+        return;
+      }
+
+      const [i, j] = coords[count];
+      displayGrid[i][j] = grid[i][j];
+
+      drawGrid(displayGrid, horizontalLine);
+      count++;
+    }, 150);
+  } else {
+    for (let i = 0; i < 9; i++) {
+      let line = '';
+      for (let j = 0; j < 9; j++) {
+        const val = grid[i][j] ?? '-';
+        line += val + ' ';
+
+        if (j === 2 || j === 5) line += '│ ';
+      }
+      console.log(line);
+
+      if (i === 2 || i === 5) console.log(horizontalLine);
+    }
+    console.log('\n❌ Судоку не может быть решён');
+  }
 }
 
 module.exports = {

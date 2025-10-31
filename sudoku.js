@@ -15,7 +15,7 @@ function readPuzzleLine(path, lineIndex = 0) {
   if (line.length !== 81) {
     throw new Error(`Строка должна содержать 81 символ, получено: ${line.length}`);
   }
-
+  
   const grid = [];
   for (let row = 0; row < 9; row++) {
     const rowArr = [];
@@ -32,11 +32,16 @@ function readPuzzleLine(path, lineIndex = 0) {
 
   return grid;
 }
-function solve() {
-  /**
-   * Принимает игровое поле в том формате, в котором его вернули из функции read.
-   * Возвращает игровое поле после попытки его решить.
-   */
+
+const { backtrack } = require('./sup-functions/sup-solve');
+function solve(board) {
+  if (board.flat().filter((el) => el === null).length === 0) return board;
+  if (board.flat().filter((el) => el !== null).length < 17) return board;
+
+  const solvedBoard = board.map((el) => el.slice());
+  const result = backtrack(solvedBoard);
+
+  return result ? solvedBoard : board; // Ура!!!
 }
 
 function isSolved() {

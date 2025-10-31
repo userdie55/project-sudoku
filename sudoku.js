@@ -2,33 +2,36 @@ const fs = require('fs');
 const { EOL } = require('os');
 const colors = require('colors');
 
-function read() {
-  try {
-    const data = fs.readFileSync('puzzles.txt', 'utf-8');
-    const lines = data.trim().split(EOL);
-    const indexStr = process.argv[2];
-    const index = parseInt(indexStr, 10); 
+function readPuzzleLine(path, lineIndex = 0) {
+  const data = fs.readFileSync(path, 'utf8');
+  const lines = data.split(/\r?\n/).filter((line) => line.trim() !== '');
 
-    if (isNaN(index) || index < 0 || index >= lines.length) {
-      console.error('Некорректный индекс линии'.red);
-      return [];
-    }
-
-    const line = lines[index].trim();
-    const arr = line.split('');
-    const result = [];
-
-    for (let i = 0; i < arr.length; i += 9) {
-      result.push(arr.slice(i, i + 9));
-    }
-
-    return result;
-  } catch (err) {
-    console.error(`Ошибка при чтении файла: ${err}`.red);
-    return [];
+  if (lineIndex < 0 || lineIndex >= lines.length) {
+    throw new Error(`Индекс строки вне диапазона. Доступно строк: ${lines.length}`);
   }
-}
 
+  const line = lines[lineIndex].trim();
+
+  if (line.length !== 81) {
+    throw new Error(`Строка должна содержать 81 символ, получено: ${line.length}`);
+  }
+
+  const grid = [];
+  for (let row = 0; row < 9; row++) {
+    const rowArr = [];
+    for (let col = 0; col < 9; col++) {
+      const ch = line[row * 9 + col];
+      if (ch === '-') {
+        rowArr.push(null);
+      } else {
+        rowArr.push(parseInt(ch, 10));
+      }
+    }
+    grid.push(rowArr);
+  }
+
+  return grid;
+}
 function solve() {
   /**
    * Принимает игровое поле в том формате, в котором его вернули из функции read.

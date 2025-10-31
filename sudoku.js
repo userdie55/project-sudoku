@@ -1,8 +1,9 @@
 const fs = require('fs');
 const { EOL } = require('os');
 const colors = require('colors');
+const { backtrack } = require('./sup-functions/sup-solve');
 
-function readPuzzleLine(path, lineIndex = 0) {
+function read(path, lineIndex = 0) {
   const data = fs.readFileSync(path, 'utf8');
   const lines = data.split(/\r?\n/).filter((line) => line.trim() !== '');
 
@@ -15,7 +16,7 @@ function readPuzzleLine(path, lineIndex = 0) {
   if (line.length !== 81) {
     throw new Error(`Строка должна содержать 81 символ, получено: ${line.length}`);
   }
-  
+
   const grid = [];
   for (let row = 0; row < 9; row++) {
     const rowArr = [];
@@ -33,7 +34,6 @@ function readPuzzleLine(path, lineIndex = 0) {
   return grid;
 }
 
-const { backtrack } = require('./sup-functions/sup-solve');
 function solve(board) {
   if (board.flat().filter((el) => el === null).length === 0) return board;
   if (board.flat().filter((el) => el !== null).length < 17) return board;
@@ -41,11 +41,11 @@ function solve(board) {
   const solvedBoard = board.map((el) => el.slice());
   const result = backtrack(solvedBoard);
 
-  return result ? solvedBoard : board; // Ура!!!
+  return result ? solvedBoard : board;
 }
 
 function isSolved(board) {
-  return !board.flat().includes(null)
+  return !board.flat().includes(null);
 }
 
 function prettyBoard(grid) {
@@ -74,3 +74,10 @@ function prettyBoard(grid) {
     return console.log('\n❌ Судоку не может быть решён');
   }
 }
+
+module.exports = {
+  read,
+  solve,
+  isSolved,
+  prettyBoard,
+};

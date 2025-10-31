@@ -36,6 +36,9 @@ function prettyBoard(grid) {
       console.log(horizontalLine.gray);
     }
   }
+  if (isSolved(grid)) {
+    return console.log('\n✅ Судоку решено');
+  } else {
+    return console.log('\n❌ Судоку не может быть решён');
+  }
 }
-
-

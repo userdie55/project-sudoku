@@ -43,4 +43,4 @@ function isValid(array, row, col, num) {
   return true;
 }
 
-module.exports = { backtrack, findEmpty };
+module.exports = { backtrack };

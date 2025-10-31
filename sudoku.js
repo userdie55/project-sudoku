@@ -29,11 +29,15 @@ function read() {
   }
 }
 
-function solve() {
-  /**
-   * Принимает игровое поле в том формате, в котором его вернули из функции read.
-   * Возвращает игровое поле после попытки его решить.
-   */
+const { backtrack } = require('./sup-functions/sup-solve');
+function solve(board) {
+  if (board.flat().filter((el) => el === null).length === 0) return board;
+  if (board.flat().filter((el) => el !== null).length < 17) return board;
+
+  const solvedBoard = board.map((el) => el.slice());
+  const result = backtrack(solvedBoard);
+
+  return result ? solvedBoard : board; // Ура!!!
 }
 
 function isSolved() {

@@ -66,11 +66,8 @@ function prettyBoard(grid) {
       console.log(horizontalLine);
     }
   }
-  if (isSolved(grid)) {
-    return console.log('\n✅ Судоку решено');
-  } else {
-    return console.log('\n❌ Судоку не может быть решён');
-  }
+
+  return isSolved(grid) ? console.log('\n✅ Судоку решено') : console.log('\n❌ Судоку не может быть решён')
 }
 
 module.exports = {

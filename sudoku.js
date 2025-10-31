@@ -1,8 +1,37 @@
-function read() {
-  // fix
+const fs = require('fs');
+const { backtrack } = require('./sup-functions/sup-solve');
+
+function read(path, lineIndex = 0) {
+  const data = fs.readFileSync(path, 'utf8');
+  const lines = data.split(/\r?\n/).filter((line) => line.trim() !== '');
+
+  if (lineIndex < 0 || lineIndex >= lines.length) {
+    throw new Error(`Индекс строки вне диапазона. Доступно строк: ${lines.length}`);
+  }
+
+  const line = lines[lineIndex].trim();
+
+  if (line.length !== 81) {
+    throw new Error(`Строка должна содержать 81 символ, получено: ${line.length}`);
+  }
+
+  const grid = [];
+  for (let row = 0; row < 9; row++) {
+    const rowArr = [];
+    for (let col = 0; col < 9; col++) {
+      const ch = line[row * 9 + col];
+      if (ch === '-') {
+        rowArr.push(null);
+      } else {
+        rowArr.push(parseInt(ch, 10));
+      }
+    }
+    grid.push(rowArr);
+  }
+
+  return grid;
 }
 
-const { backtrack, findEmpty } = require('./sup-functions/sup-solve');
 function solve(board) {
   if (board.flat().filter((el) => el === null).length === 0) return board;
   if (board.flat().filter((el) => el !== null).length < 17) return board;
@@ -13,17 +42,39 @@ function solve(board) {
   return result ? solvedBoard : board;
 }
 
-function isSolved() {
-  /**
-   * Принимает игровое поле в том формате, в котором его вернули из функции solve.
-   * Возвращает булевое значение — решено это игровое поле или нет.
-   */
+function isSolved(board) {
+  return !board.flat().includes(null);
 }
 
-function prettyBoard() {
-  /**
-   * Принимает игровое поле в том формате, в котором его вернули из функции solve.
-   * Выводит в консоль/терминал судоку.
-   * Подумай, как симпатичнее его вывести.
-   */
+function prettyBoard(grid) {
+  const horizontalLine = '───────┼───────┼───────';
+
+  for (let row = 0; row < 9; row++) {
+    let line = '';
+    for (let col = 0; col < 9; col++) {
+      const val = grid[row][col];
+      if (val !== null) {
+        line += val.toString() + ' ';
+      } else {
+        line += '· ';
+      }
+      if (col === 2 || col === 5) line += '│ ';
+    }
+    console.log(line);
+
+    if (row === 2 || row === 5) {
+      console.log(horizontalLine);
+    }
+  }
+  if (isSolved(grid)) {
+    return console.log('\n✅ Судоку решено');
+  } else {
+    return console.log('\n❌ Судоку не может быть решён');
+  }
 }
+
+module.exports = {
+  read,
+  solve,
+  prettyBoard,
+};

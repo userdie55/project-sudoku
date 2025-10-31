@@ -1,1 +1,5 @@
-// Используйте для решения судоку необходимые функции из файла sudoku.js
+const { read, solve, prettyBoard } = require('./sudoku');
+
+const data = read('./puzzle.txt');
+const result = solve(data);
+prettyBoard(result);
